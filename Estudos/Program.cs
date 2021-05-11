@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using Estudos.Models;
+using Estudos.DAO;
 
 namespace Estudos
 {
@@ -9,7 +10,7 @@ namespace Estudos
     {
         static void Main(string[] args)
         {
-            usuarioDao usuarioDao = new usuarioDao();
+            UsuarioDAO usuarioDao = new UsuarioDAO();
             List<Usuario> usuarios;
             string confirmacao;
             int option = 1;
@@ -64,7 +65,7 @@ namespace Estudos
                                 senha = Console.ReadLine();
                             }
                             Console.Clear();
-                            Console.WriteLine("\nDeseja adicionar o usuario?");
+                            Console.WriteLine("\nDeseja adicionar o usuário?");
                             Console.WriteLine("\n");
                             Console.WriteLine("| Nome: " + nome);
                             Console.WriteLine("| Email: " + email);
@@ -103,7 +104,7 @@ namespace Estudos
                         if (usuarios.Count > 0)
                         {
                             Console.Clear();
-                            Console.WriteLine("Deseja excluir o usuario:\n");
+                            Console.WriteLine("Deseja excluir o usuário:\n");
                             Console.WriteLine("| id: " + us.getId());
                             Console.WriteLine("| Nome: " + us.getNome());
                             Console.WriteLine("| Email: " + us.getEmail());
@@ -138,109 +139,6 @@ namespace Estudos
                         break;
                 }
             }
-        }
-    }
-
-    class usuarioDao
-    {
-        public List<Usuario> buscarPorId(Usuario usuario)
-        {
-            bool valid = false;
-            List<Usuario> usuarios = new List<Usuario>();
-            try
-            {
-                MySqlConnection conn = new MySqlConnection("Server=localhost;User ID=root;Password=;Database=academia");
-
-                string query = "SELECT * FROM `administradores` WHERE `AdministradoresId` = @id";
-                MySqlCommand comando = new MySqlCommand(query, conn);
-                comando.Parameters.AddWithValue("@id", usuario.getId());
-
-                conn.Open();
-
-                MySqlDataReader rd = comando.ExecuteReader();
-
-                while (rd.Read())
-                {
-                    Usuario u = new Usuario(
-                        Convert.ToInt16(rd["AdministradoresId"]),
-                        Convert.ToString(rd["AdministradoresNome"]),
-                        Convert.ToString(rd["AdministradoresEmail"]),
-                        Convert.ToString(rd["AdministradoresSenha"])
-                        );
-                    usuarios.Add(u);
-                }
-                conn.Close();
-            }
-            catch (Exception ex) { Console.WriteLine(ex.ToString()); }
-            return usuarios;
-        }
-        public bool adicionar(Usuario usuario)
-        {
-            bool valid = false;
-            try
-            {
-                MySqlConnection conn = new MySqlConnection("Server=localhost;User ID=root;Password=;Database=academia");
-
-                string query = "INSERT INTO `administradores` (`AdministradoresId`, `AdministradoresNome`, `AdministradoresEmail`, `AdministradoresSenha`) VALUES (NULL, @nome, @email, @senha);";
-                MySqlCommand comando = new MySqlCommand(query, conn);
-                comando.Parameters.AddWithValue("@nome", usuario.getNome());
-                comando.Parameters.AddWithValue("@email", usuario.getEmail());
-                comando.Parameters.AddWithValue("@senha", usuario.getSenha());
-
-                conn.Open();
-                comando.ExecuteNonQuery();
-                conn.Close();
-                valid = true;
-            }
-            catch (Exception ex) { Console.WriteLine(ex.ToString()); }
-            return valid;
-        }
-        public bool excluir(Usuario usuario)
-        {
-            bool valid = false;
-            try
-            {
-                MySqlConnection conn = new MySqlConnection("Server=localhost;User ID=root;Password=;Database=academia");
-
-                string query = "DELETE FROM `administradores` WHERE `administradores`.`AdministradoresId` = @id";
-                MySqlCommand comando = new MySqlCommand(query, conn);
-                comando.Parameters.AddWithValue("@id", usuario.getId());
-
-                conn.Open();
-                comando.ExecuteNonQuery();
-                conn.Close();
-                valid = true;
-            }
-            catch (Exception ex) { Console.WriteLine(ex.ToString()); }
-            return valid;
-        }
-        public List<Usuario> buscarTodos()
-        {
-            List<Usuario> usuarios = new List<Usuario>();
-            try
-            {
-                MySqlConnection conn = new MySqlConnection("Server=localhost;User ID=root;Password=;Database=academia");
-
-                string query = "SELECT * FROM administradores";
-                MySqlCommand comando = new MySqlCommand(query, conn);
-                conn.Open();
-
-                MySqlDataReader rd = comando.ExecuteReader();
-
-                while (rd.Read())
-                {
-                    Usuario u = new Usuario(
-                        Convert.ToInt16(rd["AdministradoresId"]),
-                        Convert.ToString(rd["AdministradoresNome"]),
-                        Convert.ToString(rd["AdministradoresEmail"]),
-                        Convert.ToString(rd["AdministradoresSenha"])
-                        );
-                    usuarios.Add(u);
-                }
-                conn.Close();
-            }
-            catch (Exception ex) { Console.WriteLine(ex.ToString()); }
-            return usuarios;
         }
     }
 }
