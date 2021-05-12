@@ -1,5 +1,4 @@
-﻿using MySql.Data.MySqlClient;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Estudos.Models;
 using Estudos.DAO;
@@ -27,18 +26,16 @@ namespace Estudos
                 {
                     case "1":
                         Console.Clear();
-                        usuarios = usuarioDao.buscarTodos();
-                        foreach (Usuario usuario in usuarios)
-                        {
-                            Console.WriteLine("| Id: " + usuario.getId());
-                            Console.WriteLine("| Nome: " + usuario.getNome());
-                            Console.WriteLine("| Email: " + usuario.getEmail());
-                            Console.WriteLine("\n");
-                        }
-
-                        Console.WriteLine("0 - para sair");
-                        Console.WriteLine("1 - menu anterior");
-                        option = Convert.ToInt16(Console.ReadLine());
+                            usuarios = usuarioDao.buscarTodos();
+                            foreach (Usuario usuario in usuarios)
+                            {
+                                Console.WriteLine("| Id: " + usuario.getId());
+                                Console.WriteLine("| Nome: " + usuario.getNome());
+                                Console.WriteLine("| Email: " + usuario.getEmail());
+                                Console.WriteLine("\n");
+                            }
+                            Console.WriteLine("0 - para sair ou 1 - para voltar");
+                            option = Convert.ToInt16(Console.ReadLine());
                         break;
                     case "2":
                         Console.Clear();
